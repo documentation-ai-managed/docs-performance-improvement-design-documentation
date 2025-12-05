@@ -1,0 +1,144 @@
+---
+title: Webhooks
+description: Automate workflows and receive real-time notifications using Performance Improvement Design webhooks
+---
+
+## Webhook Overview
+
+Webhooks enable real-time communication between Performance Improvement Design and your applications, allowing you to automate workflows and respond to events instantly.
+
+<Columns cols={3}>
+  <Card title="Event-Driven" icon="zap" href="#event-driven">
+    Receive notifications for documentation changes and user actions.
+  </Card>
+  <Card title="Real-Time Updates" icon="refresh-cw" href="#real-time-updates">
+    Get instant notifications when content is updated or published.
+  </Card>
+  <Card title="Custom Integrations" icon="plug" href="#custom-integrations">
+    Build custom integrations with your existing tools and services.
+  </Card>
+</Columns>
+
+## Setting Up Webhooks
+
+Configure webhooks to start receiving event notifications from your workspace.
+
+<Steps>
+  <Step title="Create Endpoint" icon="server">
+    Set up an HTTPS endpoint in your application to receive webhook payloads.
+  </Step>
+  <Step title="Register Webhook" icon="plus">
+    Add your endpoint URL in the webhook settings panel.
+  </Step>
+  <Step title="Configure Events" icon="settings">
+    Select which events you want to receive notifications for.
+  </Step>
+  <Step title="Test Integration" icon="check-circle">
+    Send test events to verify your endpoint is working correctly.
+  </Step>
+</Steps>
+
+<Callout kind="info">Ensure your webhook endpoint uses HTTPS and can handle POST requests with JSON payloads.</Callout>
+
+## Available Events
+
+Subscribe to specific events to receive targeted notifications.
+
+<Tabs>
+  <Tab title="Content Events" icon="file-text">
+    <Expandable title="Document Created" default-open="true">
+      Triggered when a new document is added to your workspace.
+    </Expandable>
+    <Expandable title="Document Updated" default-open="false">
+      Fired when existing content is modified.
+    </Expandable>
+    <Expandable title="Document Published" default-open="false">
+      Sent when a document is published to the public.
+    </Expandable>
+  </Tab>
+  <Tab title="User Events" icon="users">
+    <Expandable title="User Joined" default-open="true">
+      Notifies when a new user joins your workspace.
+    </Expandable>
+    <Expandable title="User Left" default-open="false">
+      Alerts when a user leaves or is removed from the workspace.
+    </Expandable>
+  </Tab>
+  <Tab title="System Events" icon="settings">
+    <Expandable title="Workspace Updated" default-open="true">
+      Triggered when workspace settings are changed.
+    </Expandable>
+    <Expandable title="API Rate Limit" default-open="false">
+      Warns when approaching API rate limits.
+    </Expandable>
+  </Tab>
+</Tabs>
+
+## Webhook Payloads
+
+Understanding the structure of webhook payloads helps you process events correctly.
+
+<ExpandableGroup>
+  <Expandable title="Payload Structure" default-open="true">
+    All webhook payloads follow a consistent JSON structure with event type, timestamp, and relevant data.
+    
+    <CodeGroup tabs="JSON,TypeScript">
+      ```json
+{
+  "event": "document.updated",
+  "timestamp": "2024-01-15T10:30:00Z",
+  "workspace": "your-workspace-id",
+  "data": {
+    "document_id": "doc-123",
+    "title": "API Reference",
+    "updated_by": "user@example.com"
+  }
+}
+```
+      ```typescript
+interface WebhookPayload {
+  event: string;
+  timestamp: string;
+  workspace: string;
+  data: Record<string, any>;
+}
+```
+    </Expandable>
+  <Expandable title="Security Verification" default-open="false">
+    Verify webhook authenticity using HMAC signatures to prevent spoofing attacks.
+  </Expandable>
+</ExpandableGroup>
+
+<Callout kind="tip">Always validate webhook signatures to ensure the payload originates from Performance Improvement Design.</Callout>
+
+## Best Practices
+
+Follow these guidelines for reliable webhook integrations.
+
+| Practice | Reason |
+|----------|--------|
+| Idempotent Processing | Handle duplicate events gracefully |
+| Error Handling | Implement retry logic for failed deliveries |
+| Rate Limiting | Respect API limits and implement throttling |
+
+<Expandable title="Advanced Patterns" default-open="false">
+  Use webhooks for complex workflows like automated testing, content synchronization, and notification systems.
+</Expandable>
+
+## Troubleshooting
+
+Common webhook issues and solutions:
+
+<ExpandableGroup>
+  <Expandable title="Delivery Failures" default-open="true">
+    Check endpoint availability, SSL certificates, and network connectivity.
+  </Expandable>
+  <Expandable title="Invalid Payloads" default-open="false">
+    Verify your parsing logic handles all event types and data structures.
+  </Expandable>
+  <Expandable title="Rate Limiting" default-open="false">
+    Implement exponential backoff for retry attempts.
+  </Expandable>
+</ExpandableGroup>
+
+<Callout kind="alert">Webhook deliveries are retried up to 5 times with exponential backoff before being marked as failed.</Callout>
